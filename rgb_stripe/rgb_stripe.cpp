@@ -3,13 +3,18 @@
 
 RgbController::RgbController(int r_pin, int g_pin, int b_pin, ColorEffect *effect, bool high_is_on)
     : _r_pin(r_pin), _g_pin(g_pin), _b_pin(b_pin),
-      _high_is_on(high_is_on), _last_update(millis()), _effect(effect)
+      _high_is_on(high_is_on), _last_update(millis()), _effect(effect),
+      _speed(1), _delta(0)
 {
     pinMode(_r_pin, OUTPUT);
     pinMode(_g_pin, OUTPUT);
     pinMode(_b_pin, OUTPUT);
 
     set_color({0, 0, 0});
+}
+
+void RgbController::set_speed(unsigned int speed) {
+    this->_speed = speed;
 }
 
 void RgbController::set_color(Color color)
@@ -36,10 +41,13 @@ void RgbController::set_effect(ColorEffect *effect)
 void RgbController::update()
 {
     unsigned long time = millis();
-    unsigned long delta = time - _last_update;
+    _delta += time - _last_update;
     _last_update = time;
-    // TODO: compute how many steps to perform
-    _effect->update(*this);
+
+    while (_delta > _speed) {
+        _effect->update(*this);
+        _delta -= _speed;
+    }
 }
 
 ConstantColorEffect::ConstantColorEffect(Color color) : _color(color) {}
@@ -87,10 +95,6 @@ void CrossFadeEffect::update(RgbController &controller)
         else if (b_diff < 0)
             _state.b++;
     }
-    
-    Serial.println(_state.r);
-    Serial.println(_state.g);
-    Serial.println(_state.b);
 
     controller.set_color(_state);
 };

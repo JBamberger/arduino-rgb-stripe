@@ -21,6 +21,8 @@ public:
 class RgbController
 {
     unsigned long _last_update;
+    unsigned long _delta;
+    unsigned int _speed;
     bool _high_is_on;
     int _r_pin;
     int _g_pin;
@@ -31,6 +33,7 @@ public:
     explicit RgbController(
         int r_pin, int g_pin, int b_pin,
         ColorEffect *effect, bool high_is_on = true);
+    void set_speed(unsigned int speed);
     void set_color(Color color);
     void set_effect(ColorEffect *effect);
     void update();
