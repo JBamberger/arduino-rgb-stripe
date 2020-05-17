@@ -15,7 +15,7 @@ class ColorEffect
 {
 
 public:
-    virtual void update(RgbController &controller, unsigned long delta);
+    virtual void update(RgbController &controller);
 };
 
 class RgbController
@@ -42,7 +42,19 @@ class ConstantColorEffect : public ColorEffect
 
 public:
     ConstantColorEffect(Color color);
-    virtual void update(RgbController &controller, unsigned long delta);
+    virtual void update(RgbController &controller);
+};
+
+class CrossFadeEffect : public ColorEffect
+{
+    const int _len;
+    const Color *_stops;
+    int _position;
+    Color _state;
+
+public:
+    CrossFadeEffect(const Color *colors, int len);
+    virtual void update(RgbController &controller);
 };
 
 #endif rgb_stripe

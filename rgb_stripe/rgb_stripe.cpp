@@ -38,12 +38,59 @@ void RgbController::update()
     unsigned long time = millis();
     unsigned long delta = time - _last_update;
     _last_update = time;
-    _effect->update(*this, delta);
+    // TODO: compute how many steps to perform
+    _effect->update(*this);
 }
 
 ConstantColorEffect::ConstantColorEffect(Color color) : _color(color) {}
 
-void ConstantColorEffect::update(RgbController &controller, unsigned long delta)
+void ConstantColorEffect::update(RgbController &controller)
 {
     controller.set_color(this->_color);
 }
+
+CrossFadeEffect::CrossFadeEffect(const Color *colors, int len)
+    : _stops(colors), _len(len), _state(*colors), _position(1)
+{
+}
+
+void CrossFadeEffect::update(RgbController &controller)
+{
+    const Color &target = *(_stops + _position);
+
+    int r_diff = _state.r - target.r;
+    int g_diff = _state.g - target.g;
+    int b_diff = _state.b - target.b;
+
+    if (r_diff == 0 && g_diff == 0 && b_diff == 0)
+    {
+        // roll over to next color
+        _state = target;
+        _position++;
+        if (_position >= _len)
+        {
+            _position = 0;
+        }
+    } else {
+        if (r_diff > 0)
+            _state.r--;
+        else if (r_diff < 0)
+            _state.r++;
+
+        if (g_diff > 0)
+            _state.g--;
+        else if (g_diff < 0)
+            _state.g++;
+
+        if (b_diff > 0)
+            _state.b--;
+        else if (b_diff < 0)
+            _state.b++;
+    }
+    
+    Serial.println(_state.r);
+    Serial.println(_state.g);
+    Serial.println(_state.b);
+
+    controller.set_color(_state);
+};

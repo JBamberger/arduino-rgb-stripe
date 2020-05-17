@@ -1,5 +1,5 @@
-#ifndef colors
-#define colors
+#ifndef JKSDHFSDJK_colors
+#define JKSDHFSDJK_colors
 
 #include "rgb_stripe.h"
 
@@ -9,4 +9,4 @@ const Color RED(255,0,0);
 const Color GREEN(0,255,0);
 const Color BLUE(0,0,255);
 
-#endif colors
+#endif JKSDHFSDJK_colors
