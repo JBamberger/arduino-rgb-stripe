@@ -98,3 +98,25 @@ void CrossFadeEffect::update(RgbController &controller)
 
     controller.set_color(_state);
 };
+
+
+
+CycleEffect::CycleEffect(const Color *colors, int len, int call_count)
+    : _stops(colors), _len(len), _call_count(call_count), _count(call_count), _position(1)
+{
+}
+
+void CycleEffect::update(RgbController &controller)
+{
+    _count--;
+    if (_count <= 0) {
+        _position++;
+        if (_position >= _len)
+        {
+            _position = 0;
+        }
+        _count = _call_count;
+
+        controller.set_color(*(_stops + _position));
+    }
+};

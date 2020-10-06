@@ -60,4 +60,17 @@ public:
     virtual void update(RgbController &controller);
 };
 
+class CycleEffect : public ColorEffect
+{
+    const int _len;
+    const Color *_stops;
+    const int _call_count;
+    int _position;
+    int _count;
+
+public:
+    CycleEffect(const Color *colors, int len, int call_count = 255);
+    virtual void update(RgbController &controller);
+};
+
 #endif rgb_stripe
