@@ -1,6 +1,7 @@
 #ifndef rgb44keyremote
 #define rgb44keyremote
 
+#include <colors.h>
 #include <rgb_stripe.h>
 
 enum Rgb44RemoteColorComponent {
@@ -19,7 +20,19 @@ enum Rgb44RemoteDiyColor {
     diy1, diy2, diy3, diy4, diy5, diy6
 };
 
+Color _colors_flash[] = {WHITE, BLACK};
+Color _colors3[] = {RED, GREEN, BLUE};
+Color _colors7[] = {RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, PURPLE};
+
+CycleEffect _effect_flash(_colors_flash, 2);
+CycleEffect _effect_jump3(_colors3, 3);
+CycleEffect _effect_jump7(_colors7, 7);
+CrossFadeEffect _effect_fade3(_colors3, 3);
+CrossFadeEffect _effect_fade7(_colors7, 7);
+
 class Rgb44KeyRemote {
+
+
 
     RgbController _controller;
 
@@ -39,11 +52,27 @@ public:
     void decrease_speed() {}
     void set_diy(int index) {}
     void set_auto() {}
-    void set_flash() {}
-    void set_effect_jump3() {}
-    void set_effect_jump7() {}
-    void set_effect_fade3() {}
-    void set_effect_fade7() {}
+
+    void set_flash() {
+        _controller.set_effect(&_effect_flash);
+    }
+
+    void set_effect_jump3() {
+        _controller.set_effect(&_effect_jump3);
+    }
+    
+    void set_effect_jump7() {
+        _controller.set_effect(&_effect_jump7);
+    }
+    
+    void set_effect_fade3() {
+        _controller.set_effect(&_effect_fade3);
+    }
+    
+    void set_effect_fade7() {
+        _controller.set_effect(&_effect_fade7);
+    }
+
 
 };
 
